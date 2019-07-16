@@ -32,9 +32,6 @@ library(lmPerm)
 ```{r}
 dat_bm<- read_excel("Moricandia_BIOMASA_bueno.xlsx")
 View(dat_bm[1:10,])
-dat_bm<- dat_bm %>% 
-  rename(
-    Competencia= X__1)
 ```
 2. Datos de supervivencia
 ```{r}
@@ -100,6 +97,7 @@ Primero vamos a ver si Moricandia arvensis (Quesada) tiene diferente comportamie
 
 ```{r}
 summary(lmp(dat_bm_ar_q$`Biomasa_g`~dat_bm_ar_q$Suelo*dat_bm_ar_q$Densidad*dat_bm_ar_q$Competencia, perm="Exact"))
+
 ```
 
 En cuanto a Moricandia arvensis (Baza), los resultados de la permanova son: 
@@ -108,11 +106,15 @@ En cuanto a Moricandia arvensis (Baza), los resultados de la permanova son:
   summary(lmp(dat_bm_ar_b$`Biomasa_g`~dat_bm_ar_b$Suelo*dat_bm_ar_b$Densidad*dat_bm_ar_b$Competencia, perm="Exact"))
 ```
 
+¿Qué pasa si añado "Localidad" como factor extra??
+```{r}
+summary(lmp(dat_bm_ar$`Biomasa_g`~dat_bm_ar$Localidad*dat_bm_ar$Densidad*dat_bm_ar$Competencia*dat_bm_ar$Suelo, perm="Exact"))
+```
+
 También lo podemos ver para Moricandia rytidocarpoides
 ```{r}
 summary(lmp(dat_bm_ry$`Biomasa_g`~dat_bm_ry$Suelo*dat_bm_ry$Densidad*dat_bm_ry$Competencia, perm="Exact"))
 ```
-
 
 Y finalmente para Moricandia moricandioides 
 
@@ -771,3 +773,1179 @@ ggplot(data=summ27,aes(x=Localidad,y=Biomasa_g,group=Densidad,colour=Densidad))+
          ,panel.border = element_rect(fill=NA, color = "black"))
 ```
 
+#Análisis de germinación y supervivencia
+
+Vamos a escoger solo datos de Moricandia arvensis
+```{r}
+dat_sup_ar<-subset(dat_sup, dat_sup$Especie=="M.arvensis" | dat_sup$Especie=="M.moricandioides_M.arvensis"|dat_sup$Especie=="M.rytidocarpoides_M.arvensis")
+
+dat_sup_ar_q <-subset(dat_sup_ar, dat_sup_ar$Localidad=="Quesada")
+summary(dat_sup_ar_q)
+
+dat_sup_ar_b <-subset(dat_sup_ar, dat_sup_ar$Localidad=="Baza")
+summary(dat_sup_ar_b)
+```
+
+Ahora vamos a coger los datos de Moricandia rytidocarpoides
+
+```{r}
+dat_sup_ry<- subset(dat_sup, dat_sup$Especie=="M.rytidocarpoides"|dat_sup$Especie=="M.rytidocarpoides_M.arvensis")
+summary(dat_sup_ry)
+```
+
+Por último también cogemos solo los datos de Moricandia moricandioides
+```{r}
+dat_sup_mo <-subset(dat_sup, dat_sup$Especie=="M.moricandioides"|dat_sup$Especie=="M.moricandioides_M.arvensis")
+summary(dat_sup_mo)
+plot_missing(dat_sup_mo)
+```
+
+#Vamos a realizar PERMANOVA de germinación para ver si hay diferencia según el tipo de suelo, competencia y/o densidad
+
+Moricandia Arvensis (Q)
+
+```{r}
+summary(lmp(dat_sup_ar_q$semilla_emerg_2~dat_sup_ar_q$Suelo*dat_sup_ar_q$Densidad*dat_sup_ar_q$Competencia, perm="Exact"))
+
+```
+
+En cuanto a Moricandia arvensis (Baza), los resultados de la permanova son: 
+
+```{r}
+ summary(lmp(dat_sup_ar_b$semilla_emerg_2~dat_sup_ar_b$Suelo*dat_sup_ar_b$Densidad*dat_sup_ar_b$Competencia, perm="Exact"))
+```
+
+¿Qué pasa si añado "Localidad" como factor extra??
+```{r}
+summary(lmp(dat_sup_ar$semilla_emerg_2~dat_sup_ar$Localidad*dat_sup_ar$Densidad*dat_sup_ar$Competencia*dat_sup_ar$Suelo, perm="Exact"))
+```
+
+También lo podemos ver para Moricandia rytidocarpoides
+```{r}
+summary(lmp(dat_sup_ry$semilla_emerg_2~dat_sup_ry$Suelo*dat_sup_ry$Densidad*dat_sup_ry$Competencia, perm="Exact"))
+```
+
+Y finalmente para Moricandia moricandioides 
+
+```{r}
+summary(lmp(dat_sup_mo$semilla_emerg_2~dat_sup_mo$Suelo*dat_sup_mo$Densidad*dat_sup_mo$Competencia, perm="Exact"))
+```
+
+#También podemos realizar un PERMANOVA de la supervivencia
+
+Moricandia Arvensis (Q)
+
+```{r}
+summary(lmp(dat_sup_ar_q$Sup_porc~dat_sup_ar_q$Suelo*dat_sup_ar_q$Densidad*dat_sup_ar_q$Competencia, perm="Exact"))
+
+```
+
+En cuanto a Moricandia arvensis (Baza), los resultados de la permanova son: 
+
+```{r}
+ summary(lmp(dat_sup_ar_b$Sup_porc~dat_sup_ar_b$Suelo*dat_sup_ar_b$Densidad*dat_sup_ar_b$Competencia, perm="Exact"))
+```
+
+¿Qué pasa si añado "Localidad" como factor extra??
+```{r}
+summary(lmp(dat_sup_ar$`Emergencia_1`~dat_sup_ar$Localidad*dat_sup_ar$Densidad*dat_sup_ar$Competencia*dat_sup_ar$Suelo, perm="Exact"))
+```
+
+También lo podemos ver para Moricandia rytidocarpoides
+```{r}
+summary(lmp(dat_sup_ry$Sup_porc~dat_sup_ry$Suelo*dat_sup_ry$Densidad*dat_sup_ry$Competencia, perm="Exact"))
+```
+
+Y finalmente para Moricandia moricandioides 
+
+```{r}
+summary(lmp(dat_sup_mo$Sup_porc~dat_sup_mo$Suelo*dat_sup_mo$Densidad*dat_sup_mo$Competencia, perm="Exact"))
+```
+
+
+Para poder entender mejor los resultados del PERMANOVA podemos graficar los resulados
+#Gráficos de emergencia 
+
+PRIMERO LOS GRÁFICOS DE MORICANDIA ARVENSIS EN CONDICIONES DE QUESADA 
+**Inciso= PROBLEMA, en competencia estamos poniendo dentro del mismo saco las dos especies que crecen mmmm
+
+1. Emergencia Moricandia arvensis según el tipo de suelo
+
+
+```{r}
+summ30 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ30<- summ30[-5,]
+ggplot(data=summ30,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.3)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+2. Moricandia arvensis según el tipo de densidad
+
+```{r}
+summ31 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ31<- summ31[-5,]
+ggplot(data=summ31,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+3. Moricandia arvensis según el tipo de competencia
+```{r}
+summ32 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ32<- summ32[-5,]
+ggplot(data=summ32,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis& M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+4. Moricandia arvensis (Q) según el tipo de suelo y densidad
+
+```{r}
+summ33 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ33<- summ33[-5,]
+ggplot(data=summ33,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.20), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+5. Moricandia arvensis según tipo de suelo y competencia 
+
+```{r}
+summ34 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ34<- summ34[-5,]
+ggplot(data=summ34,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis &M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.78,0.15), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+6.Emergencia Moricandia arvensis según la competencia y densidad 
+
+
+```{r}
+summ35 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ35<- summ35[-5,]
+ggplot(data=summ35,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis & M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.25,0.18), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+MORICANDIA ARVENSIS EN CONDICIONES DE BAZA
+
+7. Emergencia Moricandia arvensis(B) según el tipo de suelo
+
+
+```{r}
+summ36 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ36<- summ36[-5,]
+ggplot(data=summ36,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+8. Emergencia arvensis (B) según el tipo de densidad
+
+```{r}
+summ37 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ37<- summ37[-5,]
+ggplot(data=summ37,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+9. Moricandia arvensis(B) según el tipo de competencia
+```{r}
+summ38 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ38<- summ38[-5,]
+ggplot(data=summ38,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle("Emergencia M.arvensis &M.moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+10. Moricandia arvensis (B) según el tipo de suelo y densidad
+
+```{r}
+summ39 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ39<- summ39[-5,]
+ggplot(data=summ39,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia de Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.80))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+11. Moricandia arvensis(B) según tipo de suelo y competencia 
+
+```{r}
+summ40 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ40<- summ40[-5,]
+ggplot(data=summ40,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia M.arvensis &M.moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.75,0.80), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+12.Biomasa Moricandia arvensis(B) según la competencia y densidad 
+
+
+```{r}
+summ41 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ41<- summ41[-5,]
+ggplot(data=summ41,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.33,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+GRÁFICOS DE MORICANDIA RYTIDOCARPOIDES
+
+13. Emergencia Moricandia rytidocarpoides según el tipo de suelo
+
+
+```{r}
+summ42 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ42<- summ42[-5,]
+ggplot(data=summ42,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+14. Moricandia rytidocarpoides según el tipo de densidad
+
+```{r}
+summ43 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ43<- summ43[-5,]
+ggplot(data=summ43,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+15. Moricandia rytodcarpoides según el tipo de competencia
+```{r}
+summ44 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ44<- summ44[-5,]
+ggplot(data=summ44,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia /%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+16. Moricandia rtydocarpoides según el tipo de suelo y densidad
+
+```{r}
+summ45 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ45<- summ45[-5,]
+ggplot(data=summ45,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+17. Moricandia rytidocarpoides según tipo de suelo y competencia 
+
+```{r}
+summ46 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ46<- summ46[-5,]
+ggplot(data=summ46,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.28,0.83))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+18.Emergencia Moricandia rytidocarpoides según la competencia y densidad 
+
+
+```{r}
+summ47 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ47<- summ47[-5,]
+ggplot(data=summ47,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.73,0.80))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+GRÁFICOS DE MORICANDIA MORICANDIOIDES
+
+19. Biomasa Moricandia moricandioides según el tipo de suelo
+
+
+```{r}
+summ48 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ48<- summ48[-5,]
+ggplot(data=summ48,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+20. Moricandia rytidocarpoides según el tipo de densidad
+
+```{r}
+summ49 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ49<- summ49[-5,]
+ggplot(data=summ49,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+21. Moricandia moricandioides según el tipo de competencia
+```{r}
+summ50 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ50<- summ50[-5,]
+ggplot(data=summ50,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+22. Moricandia moricandioides según el tipo de suelo y densidad
+
+```{r}
+summ51 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ51<- summ51[-5,]
+ggplot(data=summ51,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.30,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+23. Moricandia moricandioides según tipo de suelo y competencia 
+
+```{r}
+summ52 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ52<- summ52[-5,]
+ggplot(data=summ52,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.28,0.23), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+24.Biomasa Moricandia moricandioides según la competencia y densidad 
+
+
+```{r}
+summ53 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ53<- summ53[-5,]
+ggplot(data=summ53,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.72,0.86), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+#Gráficos de supervivencia 
+ 
+1. Supervivencia Moricandia arvensis según el tipo de suelo
+
+
+```{r}
+summ54 <- summarySE(dat_sup_ar_q, measurevar = "Sup_porc", groupvars=c("Suelo")) ##using function below
+summ54<- summ54[-5,]
+ggplot(data=summ54,aes(x=Suelo,y=Sup_porc))+
+  geom_point(size=3)+
+  ggtitle(" Supervivencia M.arvensis (Q)")+
+  geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Supervivencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.3)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+2. Moricandia arvensis según el tipo de densidad
+
+```{r}
+summ31 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ31<- summ31[-5,]
+ggplot(data=summ31,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+3. Moricandia arvensis según el tipo de competencia
+```{r}
+summ32 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ32<- summ32[-5,]
+ggplot(data=summ32,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis& M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+4. Moricandia arvensis (Q) según el tipo de suelo y densidad
+
+```{r}
+summ33 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ33<- summ33[-5,]
+ggplot(data=summ33,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.20), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+5. Moricandia arvensis según tipo de suelo y competencia 
+
+```{r}
+summ34 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ34<- summ34[-5,]
+ggplot(data=summ34,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis &M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.78,0.15), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+6.Emergencia Moricandia arvensis según la competencia y densidad 
+
+
+```{r}
+summ35 <- summarySE(dat_sup_ar_q, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ35<- summ35[-5,]
+ggplot(data=summ35,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.arvensis & M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.25,0.18), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+MORICANDIA ARVENSIS EN CONDICIONES DE BAZA
+
+7. Emergencia Moricandia arvensis(B) según el tipo de suelo
+
+
+```{r}
+summ36 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ36<- summ36[-5,]
+ggplot(data=summ36,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+8. Emergencia arvensis (B) según el tipo de densidad
+
+```{r}
+summ37 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ37<- summ37[-5,]
+ggplot(data=summ37,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+9. Moricandia arvensis(B) según el tipo de competencia
+```{r}
+summ38 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ38<- summ38[-5,]
+ggplot(data=summ38,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle("Emergencia M.arvensis &M.moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+10. Moricandia arvensis (B) según el tipo de suelo y densidad
+
+```{r}
+summ39 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ39<- summ39[-5,]
+ggplot(data=summ39,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia de Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.80))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+11. Moricandia arvensis(B) según tipo de suelo y competencia 
+
+```{r}
+summ40 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ40<- summ40[-5,]
+ggplot(data=summ40,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia M.arvensis &M.moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.75,0.80), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+12.Biomasa Moricandia arvensis(B) según la competencia y densidad 
+
+
+```{r}
+summ41 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ41<- summ41[-5,]
+ggplot(data=summ41,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia arvensis (B)")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.33,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+GRÁFICOS DE MORICANDIA RYTIDOCARPOIDES
+
+13. Emergencia Moricandia rytidocarpoides según el tipo de suelo
+
+
+```{r}
+summ42 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ42<- summ42[-5,]
+ggplot(data=summ42,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia M.rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+14. Moricandia rytidocarpoides según el tipo de densidad
+
+```{r}
+summ43 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ43<- summ43[-5,]
+ggplot(data=summ43,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+15. Moricandia rytodcarpoides según el tipo de competencia
+```{r}
+summ44 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ44<- summ44[-5,]
+ggplot(data=summ44,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia /%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+16. Moricandia rtydocarpoides según el tipo de suelo y densidad
+
+```{r}
+summ45 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ45<- summ45[-5,]
+ggplot(data=summ45,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+17. Moricandia rytidocarpoides según tipo de suelo y competencia 
+
+```{r}
+summ46 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ46<- summ46[-5,]
+ggplot(data=summ46,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.28,0.83))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+18.Emergencia Moricandia rytidocarpoides según la competencia y densidad 
+
+
+```{r}
+summ47 <- summarySE(dat_sup_ry, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ47<- summ47[-5,]
+ggplot(data=summ47,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.73,0.80))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+GRÁFICOS DE MORICANDIA MORICANDIOIDES
+
+19. Biomasa Moricandia moricandioides según el tipo de suelo
+
+
+```{r}
+summ48 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo")) ##using function below
+summ48<- summ48[-5,]
+ggplot(data=summ48,aes(x=Suelo,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+20. Moricandia rytidocarpoides según el tipo de densidad
+
+```{r}
+summ49 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Densidad")) ##using function below
+summ49<- summ49[-5,]
+ggplot(data=summ49,aes(x=Densidad,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Densidad"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Alta" = "Alta", "Baja" = "Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+21. Moricandia moricandioides según el tipo de competencia
+```{r}
+summ50 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Competencia")) ##using function below
+summ50<- summ50[-5,]
+ggplot(data=summ50,aes(x=Competencia,y=semilla_emerg_2))+
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  labs(x=c("Competencia"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+22. Moricandia moricandioides según el tipo de suelo y densidad
+
+```{r}
+summ51 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Densidad")) ##using function below
+summ51<- summ51[-5,]
+ggplot(data=summ51,aes(x=Suelo,y=semilla_emerg_2,group=Densidad,colour=Densidad))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle("Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Densidad"),labels = c("Alta", "Baja "))+
+  labs(x=c("Suelo"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.2)))+
+  theme(legend.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.30,0.20))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+23. Moricandia moricandioides según tipo de suelo y competencia 
+
+```{r}
+summ52 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Suelo","Competencia")) ##using function below
+summ52<- summ52[-5,]
+ggplot(data=summ52,aes(x=Suelo,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Suelo"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1.1)))+
+  theme(legend.text  = element_text(size = rel(1.1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.28,0.23), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+24.Biomasa Moricandia moricandioides según la competencia y densidad 
+
+
+```{r}
+summ53 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Densidad","Competencia")) ##using function below
+summ53<- summ53[-5,]
+ggplot(data=summ53,aes(x=Densidad,y=semilla_emerg_2,group=Competencia,colour=Competencia))+
+  geom_line(size=1.5)+  
+  geom_point(size=3)+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  geom_errorbar(aes(ymin=semilla_emerg_2-se,ymax=semilla_emerg_2 +se),width=0.1,position = position_dodge(0.01),size=1.5)+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
+  labs(x=c("Densidad"),y=c("Emergencia (%)"))+
+  scale_x_discrete(labels=c("Alta","Baja"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.72,0.86), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+#Análisis de Supervivencia
+
+En esta parte analizaremos la supervivencia de las plantas a lo largo del experimento para ver si hay diferencia de supervivencia entre los tratamientos. Para ello haremos un análisis de Kaplan Meierla función survfit del paquete 
