@@ -703,35 +703,16 @@ ggplot(data=summ27,aes(x=Localidad,y=Biomasa_g,group=Densidad,colour=Densidad))+
 
 Tratamiento M.arv Quesada
 
-```{r}
-summ3 <- summarySE(dat_bm_ar_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento")) ##using function below
-summ3<- summ3[-5,]
-ggplot(data=summ3,aes(x=Tratamiento,y=Biomasa_g))+
-  geom_point(size=3)+
-  ggtitle(" Biomasa Moricandia arvensis (Q)")+
-  geom_errorbar(aes(ymin=Biomasa_g-se,ymax=Biomasa_g +se),width=0.1,position = position_dodge(),size=1.5)+
-  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
-  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
-  theme(axis.title = element_text(size = rel(1.5)))+
-  theme(axis.text  = element_text(size = rel(1.2)))+
-  theme(axis.line = element_line(color = 'black'))+
-  theme( panel.grid.minor = element_blank()
-         ,panel.background = element_rect(fill="white")
-         ,panel.border = element_rect(fill=NA, color = "black"))
-
-```
-
 
 
 ```{r}
-summ27 <- summarySE(dat_bm_ar_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
+
 ggplot(data=dat_bm_ar_q,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa Moricandia arvensis Quesada")+
   scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis(Q)"))+
   labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
-  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  scale_x_discrete(labels=c("Ar2NPQuesada"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NPQuesada"="Ar10NPQuesada","RiAr10NP"="RiAr10NP","Ar2PQuesada"="Ar2P","RiAr2P"="RiAr2P","Ar10PQuesada"="Ar10P","RiAr10P"="RiAr10P"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(0.8)))+
   theme(legend.title = element_text(size = rel(1)))+
@@ -745,14 +726,12 @@ ggplot(data=dat_bm_ar_q,aes(x=Tratamiento,y=Biomasa_g))+
 
 
 ```{r}
-summ27 <- summarySE(dat_bm_ar_b, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
 ggplot(data=dat_bm_ar_b,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa Moricandia arvensis Baza")+
   scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
   labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
-  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  scale_x_discrete(labels=c("Ar2NPBaza"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NPBaza"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2PBaza"="Ar2P","MoAr2P"="MoAr2P","Ar10PBaza"="Ar10P","MoAr10P"="MoAr10P"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(0.8)))+
   theme(legend.title = element_text(size = rel(1)))+
@@ -766,8 +745,6 @@ ggplot(data=dat_bm_ar_b,aes(x=Tratamiento,y=Biomasa_g))+
 
 
 ```{r}
-summ27 <- summarySE(dat_bm_ry, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
 ggplot(data=dat_bm_ry,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa Moricandia rytidocarpoides")+
@@ -788,8 +765,6 @@ ggplot(data=dat_bm_ry,aes(x=Tratamiento,y=Biomasa_g))+
 
 
 ```{r}
-summ27 <- summarySE(dat_bm_mo, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
 ggplot(data=dat_bm_mo,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa Moricandia moricandioides")+
@@ -808,9 +783,9 @@ ggplot(data=dat_bm_mo,aes(x=Tratamiento,y=Biomasa_g))+
 ```
 
 
-#Diferencia competencia interespecífica
+#Diferencia competencia interespec?fica
 
-Primero vamos a gacer subset según la localidad 
+Primero vamos a gacer subset seg?n la localidad 
 ```{r}
 dat_bm_q<-subset(dat_bm_0,dat_bm_0$Localidad=="Quesada")
 
@@ -820,8 +795,7 @@ dat_bm_b<-subset(dat_bm_0,dat_bm_0$Localidad=="Baza")
 QUESADA
 
 ```{r}
-summ27 <- summarySE(dat_bm_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
+
 ggplot(data=dat_bm_q,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa M.arvensis y M.rytidocarpoides")+
@@ -838,10 +812,8 @@ ggplot(data=dat_bm_q,aes(x=Tratamiento,y=Biomasa_g))+
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
 ```
-
+BAZA
 ```{r}
-summ27 <- summarySE(dat_bm_b, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
-summ27<- summ27[-5,]
 ggplot(data=dat_bm_b,aes(x=Tratamiento,y=Biomasa_g))+
   geom_boxplot(aes(fill=Especie))+
   ggtitle(" Biomasa Moricandia moricandioides")+
