@@ -35,7 +35,6 @@ View(dat_bm[1:10,])
 ```
 2. Datos de supervivencia
 ```{r}
-dat_sup <-read_excel("Moricandia.xlsx")
 dat_sup<- read_excel("Moricandia.xlsx", 
      col_types = c("numeric", "text", "numeric", 
          "text", "text", "text", "text", "text", 
@@ -44,7 +43,7 @@ dat_sup<- read_excel("Moricandia.xlsx",
          "numeric", "numeric", "numeric", 
          "numeric", "numeric", "numeric", 
          "numeric", "numeric", "numeric", 
-         "numeric"))
+         "numeric","numeric"))
 View(dat_sup[1:10,])
 
 ```
@@ -783,9 +782,9 @@ ggplot(data=summ27,aes(x=Localidad,y=Biomasa_g,group=Densidad,colour=Densidad))+
          ,panel.border = element_rect(fill=NA, color = "black"))
 ```
 
-#AnÃ¡lisis de emergencia y supervivencia
+##AnÃ¡lisis de emergencia y supervivencia
 
-ANÃLISIS EMERGENCIA
+#ANÃLISIS EMERGENCIA
 
 Vamos a escoger solo datos de Moricandia arvensis
 ```{r}
@@ -843,7 +842,7 @@ Y finalmente para Moricandia moricandioides
 summary(lmp(dat_sup_mo$semilla_emerg_2~dat_sup_mo$Suelo*dat_sup_mo$Densidad*dat_sup_mo$Competencia, perm="Exact"))
 ```
 
-#TambiÃ©n podemos realizar un PERMANOVA de la supervivencia
+# PERMANOVA de la supervivencia
 
 Moricandia Arvensis (Q)
 
@@ -1471,7 +1470,7 @@ ggplot(data=summ56,aes(x=Competencia,y=Sup_porc))+
   ggtitle(" Supervivencia M.arvensis& M.rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
   labs(x=c("Competencia"),y=c("Supervivencia (%)"))+
-  scale_x_discrete(labels=c("Interespecifica" = "InterespecÃ­fica", "Intraespecifica" = "IntraespecÃ­fica"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
@@ -1499,7 +1498,7 @@ ggplot(data=summ57,aes(x=Suelo,y=Sup_porc,group=Densidad,colour=Densidad))+
   theme(legend.title = element_text(size = rel(1.2)))+
   theme(legend.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
-  theme(legend.position=c(0.80,0.80), legend.background = element_blank())+
+  theme(legend.position=c(0.50,0.20), legend.background = element_blank())+
   theme( panel.grid.minor = element_blank()
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
@@ -1516,7 +1515,7 @@ ggplot(data=summ58,aes(x=Suelo,y=Sup_porc,group=Competencia,colour=Competencia))
   geom_point(size=3)+
   ggtitle(" Supervivencia M.arvensis &M.rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
   labs(x=c("Suelo"),y=c("Supervivencia (%)"))+
   scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1541,7 +1540,7 @@ ggplot(data=summ59,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   geom_point(size=3)+
   ggtitle(" Supervivencia M.arvensis & M.rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
   labs(x=c("Densidad"),y=c("Supervivencia (%)"))+
   scale_x_discrete(labels=c("Alta","Baja"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1549,7 +1548,7 @@ ggplot(data=summ59,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   theme(legend.title = element_text(size = rel(1)))+
   theme(legend.text  = element_text(size = rel(1)))+
   theme(axis.line = element_line(color = 'black'))+
-  theme(legend.position=c(0.85,0.85), legend.background = element_blank())+
+  theme(legend.position=c(0.55,0.85), legend.background = element_blank())+
   theme( panel.grid.minor = element_blank()
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
@@ -1606,7 +1605,7 @@ ggplot(data=summ62,aes(x=Competencia,y=Sup_porc))+
   ggtitle("Supervivencia M.arvensis &M.moricandioides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
   labs(x=c("Competencia"),y=c("Supervivencia (%)"))+
-  scale_x_discrete(labels=c("Interespecifica" = "InterespecÃ­fica", "Intraespecifica" = "IntraespecÃ­fica"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
@@ -1651,7 +1650,7 @@ ggplot(data=summ64,aes(x=Suelo,y=Sup_porc,group=Competencia,colour=Competencia))
   geom_point(size=3)+
   ggtitle("Supervivencia M.arvensis &M.moricandioides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
   labs(x=c("Suelo"),y=c("Supervivencia(%)"))+
   scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1676,7 +1675,7 @@ ggplot(data=summ65,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   geom_point(size=3)+
   ggtitle(" Supervivencia Moricandia arvensis (B)")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecífica", "Intraespecífica "))+
   labs(x=c("Densidad"),y=c("Supervivencia (%)"))+
   scale_x_discrete(labels=c("Alta","Baja"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1684,7 +1683,7 @@ ggplot(data=summ65,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   theme(legend.title = element_text(size = rel(1)))+
   theme(legend.text  = element_text(size = rel(1)))+
   theme(axis.line = element_line(color = 'black'))+
-  theme(legend.position=c(0.50,0.17),legend.background = element_blank())+
+  theme(legend.position=c(0.50,0.47),legend.background = element_blank())+
   theme( panel.grid.minor = element_blank()
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
@@ -1741,7 +1740,7 @@ ggplot(data=summ68,aes(x=Competencia,y=Sup_porc))+
   ggtitle(" Supervivencia Moricandia rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
   labs(x=c("Competencia"),y=c("Supervivencia (%)"))+
-  scale_x_discrete(labels=c("Interespecifica" = "InterespecÃ­fica", "Intraespecifica" = "IntraespecÃ­fica"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
@@ -1786,7 +1785,7 @@ ggplot(data=summ70,aes(x=Suelo,y=Sup_porc,group=Competencia,colour=Competencia))
   geom_point(size=3)+
   ggtitle(" Supervivencia Moricandia rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   labs(x=c("Suelo"),y=c("Supervivencia(%)"))+
   scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1810,7 +1809,7 @@ ggplot(data=summ71,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   geom_point(size=3)+
   ggtitle(" Supervivencia Moricandia rytidocarpoides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   labs(x=c("Densidad"),y=c("Supervivencia(%)"))+
   scale_x_discrete(labels=c("Alta","Baja"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1875,7 +1874,7 @@ ggplot(data=summ74,aes(x=Competencia,y=Sup_porc))+
   ggtitle(" Supervivencia Moricandia moricandioides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
   labs(x=c("Competencia"),y=c("Supervivencia(%)"))+
-  scale_x_discrete(labels=c("Interespecifica" = "InterespecÃ­fica", "Intraespecifica" = "IntraespecÃ­fica"))+
+  scale_x_discrete(labels=c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   theme(axis.title = element_text(size = rel(1.5)))+
   theme(axis.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
@@ -1903,7 +1902,7 @@ ggplot(data=summ75,aes(x=Suelo,y=Sup_porc,group=Densidad,colour=Densidad))+
   theme(legend.title = element_text(size = rel(1.2)))+
   theme(legend.text  = element_text(size = rel(1.2)))+
   theme(axis.line = element_line(color = 'black'))+
-  theme(legend.position=c(0.30,0.80))+
+  theme(legend.position=c(0.15,0.80))+
   theme( panel.grid.minor = element_blank()
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
@@ -1920,7 +1919,7 @@ ggplot(data=summ76,aes(x=Suelo,y=Sup_porc,group=Competencia,colour=Competencia))
   geom_point(size=3)+
   ggtitle(" Supervivencia Moricandia moricandioides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   labs(x=c("Suelo"),y=c("Supervivencia(%)"))+
   scale_x_discrete(labels=c("No" = "No perturbado", "Si" = "Perturbado"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1928,7 +1927,7 @@ ggplot(data=summ76,aes(x=Suelo,y=Sup_porc,group=Competencia,colour=Competencia))
   theme(legend.title = element_text(size = rel(1.1)))+
   theme(legend.text  = element_text(size = rel(1.1)))+
   theme(axis.line = element_line(color = 'black'))+
-  theme(legend.position=c(0.28,0.83), legend.background = element_blank())+
+  theme(legend.position=c(0.48,0.43), legend.background = element_blank())+
   theme( panel.grid.minor = element_blank()
          ,panel.background = element_rect(fill="white")
          ,panel.border = element_rect(fill=NA, color = "black"))
@@ -1945,7 +1944,7 @@ ggplot(data=summ77,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
   geom_point(size=3)+
   ggtitle(" Supervivencia Moricandia moricandioides")+
   geom_errorbar(aes(ymin=Sup_porc-se,ymax=Sup_porc +se),width=0.1,position = position_dodge(0.01),size=1.5)+
-  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("InterespecÃ­fica", "IntraespecÃ­fica "))+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Competencia"),labels = c("Interespecifica" = "Interespecífica", "Intraespecifica" = "Intraespecífica"))+
   labs(x=c("Densidad"),y=c("Supervivencia (%)"))+
   scale_x_discrete(labels=c("Alta","Baja"))+
   theme(axis.title = element_text(size = rel(1.5)))+
@@ -1959,6 +1958,368 @@ ggplot(data=summ77,aes(x=Densidad,y=Sup_porc,group=Competencia,colour=Competenci
          ,panel.border = element_rect(fill=NA, color = "black"))
 ```
 
-#AnÃ¡lisis de Supervivencia
 
-En esta parte analizaremos la supervivencia de las plantas a lo largo del experimento para ver si hay diferencia de supervivencia entre los tratamientos. Para ello haremos un anÃ¡lisis de Kaplan Meierla funciÃ³n survfit del paquete 
+###DIFERENCIA ENTRE TRATAMIENTOS
+
+#Diferencia Biomasa entre tratamientos
+
+Tratamiento M.arv Quesada
+
+```{r}
+summ3 <- summarySE(dat_bm_ar_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento")) ##using function below
+summ3<- summ3[-5,]
+ggplot(data=summ3,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_point(size=3)+
+  ggtitle(" Biomasa Moricandia arvensis (Q)")+
+  geom_errorbar(aes(ymin=Biomasa_g-se,ymax=Biomasa_g +se),width=0.1,position = position_dodge(),size=1.5)+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(1.2)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+
+
+```{r}
+summ27 <- summarySE(dat_bm_ar_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_ar_q,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia arvensis Quesada")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis(Q)"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+summ27 <- summarySE(dat_bm_ar_b, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_ar_b,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia arvensis Baza")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+summ27 <- summarySE(dat_bm_ry, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_ry,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia rytidocarpoides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+
+```{r}
+summ27 <- summarySE(dat_bm_mo, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_mo,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+#Diferencia competencia interespecífica entre especies
+
+Primero vamos a gacer subset según la localidad 
+```{r}
+dat_bm_q<-subset(dat_bm_0,dat_bm_0$Localidad=="Quesada")
+
+dat_bm_b<-subset(dat_bm_0,dat_bm_0$Localidad=="Baza")
+```
+
+QUESADA
+
+```{r}
+summ27 <- summarySE(dat_bm_q, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_q,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa M.arvensis y M.rytidocarpoides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(limits=c("RiAr2NP"="RiAr2NP","RiAr10NP"="RiAr10NP","RiAr2P"="RiAr2P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+```{r}
+summ27 <- summarySE(dat_bm_b, measurevar = "Biomasa_g", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_b,aes(x=Tratamiento,y=Biomasa_g))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(limits=c("MoAr2NP"="MoAr2NP","MoAr10NP"="MoAr10NP","MoAr2P"="MoAr2P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+summ27 <- summarySE(dat_bm_b, measurevar = "N_plantas", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_bm_b,aes(x=Tratamiento,y=N_plantas))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(limits=c("MoAr2NP"="MoAr2NP","MoAr10NP"="MoAr10NP","MoAr2P"="MoAr2P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+
+#Diferencia emergencia entre tratamientos
+
+```{r}
+dat_sup_q<-subset(dat_sup,dat_sup$Localidad=="Quesada")
+
+dat_sup_b<-subset(dat_sup,dat_sup$Localidad=="Baza")
+```
+
+
+Tratamiento M.arv Quesada
+
+
+
+```{r}
+
+ggplot(data=dat_sup_ar_q,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Emergencia Moricandia arvensis Quesada")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis(Q)"))+
+  labs(x=c("Tratamiento"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+ggplot(data=dat_sup_ar_b,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Emergencia Moricandia arvensis Baza")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+
+ggplot(data=dat_sup_ry,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Emergencia Moricandia rytidocarpoides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.37,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+
+```{r}
+ggplot(data=dat_sup_mo,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Emergencia Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Emergencia(%)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+#Comparación tratamientos en supervivencia
+
+
+```{r}
+
+ggplot(data=dat_sup_ar_q,aes(x=Tratamiento,y=Sup_porc))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia arvensis Quesada")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis(Q)"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+summ27 <- summarySE(dat_sup_ar_b, measurevar = "semilla_emerg_2", groupvars=c("semilla_emerg_2","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_sup_ar_b,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia arvensis Baza")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+```{r}
+summ27 <- summarySE(dat_bm_ry, measurevar = "semilla_emerg_2", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_sup_ry,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia rytidocarpoides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("Especie"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.37,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
+
+```{r}
+summ27 <- summarySE(dat_sup_mo, measurevar = "semilla_emerg_2", groupvars=c("Tratamiento","Especie")) ##using function below
+summ27<- summ27[-5,]
+ggplot(data=dat_sup_mo,aes(x=Tratamiento,y=semilla_emerg_2))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Biomasa(g)"))+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+
