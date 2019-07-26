@@ -7,7 +7,7 @@ Para ello vamos a hacer subset para quedarnos solamente con los casos de compete
 
 A la vez podemos entender un poco como se da esta competencia y si hay diferencias entre las diferentes especies. 
 ```{r}
-dat_bm_comp<-subset(dat_bm,dat_bm$Competencia=="Interespecifica")
+dat_bm_comp<-subset(dat_bm_0,dat_bm_0$Competencia=="Interespecifica")
 
 dat_bm_comp<- filter(dat_bm_comp,N_plantas > 0)
 
