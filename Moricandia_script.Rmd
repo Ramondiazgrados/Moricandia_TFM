@@ -24,6 +24,9 @@ library(calibrate)
 library(MASS)
 library(DataExplorer)
 library(lmPerm)
+library(survival)
+library(survminer)
+library(multcomp)
 ```
 
 ##Cargamos los datos 
@@ -38,6 +41,7 @@ dat_bm<-dat_bm[!(apply(dat_bm, 1, function(y) any(y == 0))),]
 dat_bm[dat_bm==0] <- NA
 
 dat_bm<-na.omit(dat_bm)
+
 
 ```
 
@@ -68,6 +72,7 @@ plot_bar(dat_bm)
 plot_density(dat_bm)
 plot_correlation(dat_bm, type = 'continuous','Review.Date')
 
+str(dat_bm)
 ```
 
 
@@ -2319,27 +2324,22 @@ ggplot(data=dat_sup_ar_q,aes(x=Tratamiento,y=Sup_porc))+
 #M.arvensis Quesada
 
 ```{r}
-modelo_suelo<- glm(Germ_b~Suelo, data = dat_sup_ar_q, family = 'binomial')
-summary(modelo_suelo)
+dat_sup_ar_q$Tratamiento<-as.factor(dat_sup_ar_q$Tratamiento)
+modelo_g<-(aovp(Germ_b~Tratamiento, data=dat_sup_ar_q))
+summary(modelo_g)
+summary(aovp(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ar_q))
 
-modelo_densidad<- glm(Germ_b~Densidad, data = dat_sup_ar_q, family = 'binomial')
-summary(modelo_densidad)
+summarySE(dat_sup_ar_q, measurevar = "Germ_b", groupvars=c("Tratamiento"))
 
-modelo_competencia<- glm(Germ_b~Competencia, data = dat_sup_ar_q, family = 'binomial')
-summary(modelo_competencia)
+summarySE(dat_sup_ar_q, measurevar = "Germ_b", groupvars=c("Densidad"))
 
-modelo<- glm(Germ_b~Suelo+Densidad+Competencia, data=dat_sup_ar_q,family="binomial")
-summary(modelo)
+summarySE(dat_sup_ar_q, measurevar = "Germ_b", groupvars=c("Suelo"))
 
-modelo2<- glm(Germ_b~Suelo*Densidad+Competencia, data=dat_sup_ar_q,family="binomial")
-summary(modelo2)
-anova(modelo,modelo2)
-modelo3<- glm(Germ_b~Suelo+Densidad*Competencia, data=dat_sup_ar_q,family="binomial")
-summary(modelo3)
+summarySE(dat_sup_ar_q, measurevar = "Germ_b", groupvars=c("Competencia"))
 
-modelo4<- glm(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ar_q,family="binomial")
-summary(modelo4)
-
+Tukey.mod3<-glht(modelo_g, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
 
 
 ```
@@ -2347,151 +2347,436 @@ summary(modelo4)
 #M.arvensis Baza
 
 ```{r}
-modelo_suelo<- glm(Germ_b~Suelo, data = dat_sup_ar_b, family = 'binomial')
-summary(modelo_suelo)
-
-modelo_densidad<- glm(Germ_b~Densidad, data = dat_sup_ar_b, family = 'binomial')
-summary(modelo_densidad)
-
-modelo_competencia<- glm(Germ_b~Competencia, data = dat_sup_ar_b, family = 'binomial')
-summary(modelo_competencia)
-
-modelo<- glm(Germ_b~Suelo+Densidad+Competencia, data=dat_sup_ar_b,family="binomial")
-summary(modelo)
-
-modelo2<- glm(Germ_b~Suelo*Densidad+Competencia, data=dat_sup_ar_b,family="binomial")
-summary(modelo2) #AIC más bajo
-
-modelo3<- glm(Germ_b~Suelo+Densidad*Competencia, data=dat_sup_ar_b,family="binomial")
-summary(modelo3)
-
-modelo4<- glm(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ar_b,family="binomial")
-summary(modelo4)
-
-
+summary(aovp(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ar_b))
 
 ```
 
 
 #M.rytidocarpoides
 ```{r}
-modelo_suelo_ry<- glm(Germ_b~Suelo, data = dat_sup_ry, family = 'binomial')
-summary(modelo_suelo_ry)
-
-modelo_densidad_ry<- glm(Germ_b~Densidad, data = dat_sup_ry, family = 'binomial')
-summary(modelo_densidad_ry)
-
-modelo_competencia_ry<- glm(Germ_b~Competencia, data = dat_sup_ry, family = 'binomial')
-summary(modelo_competencia_ry)
-
-modelo_ry<- glm(Germ_b~Suelo+Densidad+Competencia, data=dat_sup_ry,family="binomial")
-summary(modelo_ry)
-
-modelo2_ry<- glm(Germ_b~Suelo*Densidad+Competencia, data=dat_sup_ry,family="binomial")
-summary(modelo2_ry) 
-
-modelo3_ry<- glm(Germ_b~Suelo+Densidad*Competencia, data=dat_sup_ry,family="binomial")
-summary(modelo3_ry)
-
-modelo4_ry<- glm(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ry,family="binomial")
-summary(modelo4_ry)#AIC más bajo
-
-
-
+modelo1<-(aovp(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_ry))
+modelo1$
+summary(modelo1$coefficients)
+summary(modelo1)$coefficients[ , c("Estimate","Std. Error")]
 ```
 
 #M.moricandioides
 
 ```{r}
-modelo_suelo_mo<- glm(Germ_b~Suelo, data = dat_sup_mo, family = 'binomial')
-summary(modelo_suelo_mo)
+summary(aovp(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_mo))
 
-modelo_densidad_mo<- glm(Germ_b~Densidad, data = dat_sup_mo, family = 'binomial')
-summary(modelo_densidad_mo)#AIC más bajo
+summary(dat_sup_mo$Suelo)
 
-modelo_competencia_mo<- glm(Germ_b~Competencia, data = dat_sup_mo, family = 'binomial')
-summary(modelo_competencia_mo)
+```
 
-modelo_mo<- glm(Germ_b~Suelo+Densidad+Competencia, data=dat_sup_mo,family="binomial")
-summary(modelo_mo)
+###Análisis y curva de Supervivencia
 
-modelo2_mo<- glm(Germ_b~Suelo*Densidad+Competencia, data=dat_sup_mo,family="binomial")
-summary(modelo2_mo) 
+#Analisis movimiento en campo
+```{r}
+sup<- read_excel("Intentosup.xlsx")
+names(sup)
+str(sup)
+sup$Tratamiento<-as.factor(sup$Tratamiento)
+```
 
-modelo3_mo<- glm(Germ_b~Suelo+Densidad*Competencia, data=dat_sup_mo,family="binomial")
-summary(modelo3_mo)
+#Subset de datos
+```{r}
+sup_q<-subset(sup,sup$Localidad=="Quesada")
+str(sup_q)
 
-modelo4_mo<- glm(Germ_b~Suelo*Densidad*Competencia, data=dat_sup_mo,family="binomial")
-summary(modelo4_mo)
+sup_b<-subset(sup,sup$Localidad=="Baza")
+str(sup_b)
+
+sup_q_arv<-subset(sup_q,sup_q$Especie=="M.arvensis"|sup_q$Especie=="M.arvensis_M.rytidocarpoides")
+
+sup_q_ry<-subset(sup_q,sup_q$Especie=="M.rytidocarpoides"| sup_q$Especie=="M.arvensis_M.rytidocarpoides")
+
+sup_b_arv<- subset(sup_b,sup_b$Especie=="M.arvensis"|sup_b$Especie=="M.arvensis_M.moricandioides")
+
+sup_b_mo<-subset(sup_b,sup_b$Especie=="M.moricandioides"|sup_b$Especie=="M.arvensis_M.moricandioides")
+```
+
+
+#Análisis supervivencia Moricandia arvensis Quesada
+ 
+
+```{r}
+status_h<-1*sup_q_arv$S9
+kmfit_h<-survfit(Surv(sup_q_arv$tiempo,status_h)~sup_q_arv$Tratamiento,type="kaplan-meier")
+summary(kmfit_h)
+kmfit_h
+```
+
+
+```{r paged.print=TRUE}
+#Grande escala donde se ve RiAr2NP
+ggsurvplot (kmfit_h,sup_q_arv, size = 1,
+palette = c("black"  , "red", "green3",  "blue" ,   "cyan"  ,  "magenta" ,"yellow" , "gray" ),
+ylim=c(0,1),xlim=c(0,9),
+legend="top",
+legend.labs=c("Ar10NP","Ar10P","Ar2NP","Ar2P","RiAr10NP","RiAr10P","RiAr2NP","RiAr2P"),
+ggtheme = theme_bw())+
+  labs(title="Supervivencia Moricandia arvensis (Q)",
+x ="Semanas", y = "Supervivencia")
+  
+#Pequeña escala donde no se ve RiAr2NP
+ggsurvplot (kmfit_h,sup_q_arv, size = 1,
+palette = c("black"  , "red", "green3",  "blue" ,   "cyan"  ,  "magenta" ,"yellow" , "gray" ),
+ylim=c(0.7,1),xlim=c(0,9),
+legend="top",
+legend.labs=c("Ar10NP","Ar10P","Ar2NP","Ar2P","RiAr10NP","RiAr10P","RiAr2NP","RiAr2P"),
+ggtheme = theme_bw())+
+  labs(title="Supervivencia Moricandia arvensis (Q)",
+x ="Semanas", y = "Supervivencia")
 
 
 
 ```
 
-###Curva de Supervivencia
-Falta hacer la matriz para utilizar un script tal como :
+```{r}
+glm1<-glm(sup_q_arv$S9~sup_q_arv$Tratamiento,family=binomial,data=sup_q_arv)
+summary(glm1)
+```
 
-#Analisis movimiento en campo
+```{r}
+mod3<- aovp(sup_q_arv$S9~Tratamiento,data=sup_q_arv)
+summary(mod3)
 
+library(multcomp)
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
 
-Datsu <-read.table("C:/Users/jrbr_/OneDrive/Documentos/Granada/Uni/TFM/2019_26_7/Liquenes_adhesivo_campo.txt", header=TRUE, sep="\t", na.strings="NA", dec=",", strip.white=TRUE)
-names(Datsu)
-str(Datsu)
-library (survival)
+```
 
-#Movimiento liquenes EN CADA TRATAMIENTO
-attach(Datsu)
-status_h<-1*(died>0)
+#Análisis supervivencia Moricandia arvensis Baza
+ 
 
-# Fit Kaplan-Meier survivor function
-kmfit_h<-survfit(Surv(time,status_h)~TRes,type="kaplan-meier")
+```{r}
+status_h<-1*sup_b_arv$S9
+kmfit_h<-survfit(Surv(sup_b_arv$tiempo,status_h)~sup_b_arv$Tratamiento,type="kaplan-meier")
 summary(kmfit_h)
 kmfit_h
+```
 
-par(mar=c(5,5.5,2.5,1.5))
 
-plot(kmfit_h,col=c("blue","goldenrod1","red", "orangered2","grey" ,"forestgreen"), main="Adherencia l?quenes",font.main=4,cex.lab=1.5, cex.axis=1.5, cex.main=1.5, cex.sub=1.5, lwd=3, 
-     ylab="Adherencia",xlab="Muestreo",xlim=c(0,15),  ylim=c(0.5,1.0))
-#legend(x = "bottomleft", c("Agua","Control","Cola","Goma","Hidro", "Resina"),col=c("blue","red","goldenrod1", "orangered2","grey" ,"forestgreen"),lwd=3,bty="n")
-legend(x = "bottomleft", c("W","C","G","AG","HS", "SR"),col=c("blue","red","goldenrod1", "orangered2","grey" ,"forestgreen"),lwd=3,bty="n", horiz=T, cex=1.2)
+```{r paged.print=TRUE}
+ggsurvplot (kmfit_h,sup_b_arv, size = 1,
+palette = c("black"  , "red", "green3",  "blue" ,   "cyan"  ,  "magenta" ,"yellow" , "gray" ),
+ylim=c(0.6,1),xlim=c(0,9),
+legend="top",
+legend.labs=c("Ar10NP","Ar10P","Ar2NP","Ar2P","MoAr10NP","MoAr10P","MoAr2NP","MoAr2P"))+
+labs(title="Supervivencia Moricandia arvensis (B)",y="Probabilidad de Supervivencia", x="Semanas")
+  
 
-#GLM
-glm_campo<- glm(died~TRes, family=binomial, data=Datsu)
-summary(glm_campo)
 
-##Comparaciones por pares
-install.packages("multcomp", dep=T)
+
+```
+
+```{r}
+glm1<-glm(sup_b_arv$S9~sup_b_arv$Tratamiento,family=binomial,data=sup_b_arv)
+summary(glm1)
+```
+
+```{r}
+mod3<- aovp(sup_b_arv$S9~Tratamiento,data=sup_b_arv)
+summary(mod3)
+
 library(multcomp)
-glht.glm <- glht(glm_campo, mcp(TRes = "Tukey"))
-summary(glht.glm)
-cld(glht.glm,level=0.05,decreasing=F)
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
 
-#Medias error st
-library(plyr)
-ddply(Datsu, .(TRes), summarise, N=length(died[!is.na(died)]),mean=mean(died[!is.na(died)]),sd=sd(died[!is.na(died)]),se=sd(died[!is.na(died)])/sqrt(length(died[!is.na(died)])))
+```
+
+#Análisis supervivencia Moricandia rytidocarpoides
+ 
+
+```{r}
+status_h<-1*sup_q_ry$S9
+kmfit_h<-survfit(Surv(sup_q_ry$tiempo,status_h)~sup_q_ry$Tratamiento,type="kaplan-meier")
+summary(kmfit_h)
+kmfit_h
+```
 
 
-#ANALISIS MOVIMIENTO SIMULACIONES,
+```{r paged.print=TRUE}
+ggsurvplot (kmfit_h,sup_q_ry, size = 1,
+palette = c("black"  , "red", "green3",  "blue" ,   "cyan"  ,  "magenta" ,"yellow" , "gray" ),
+ylim=c(0.15,1),xlim=c(0,9),
+legend="top",
+legend.labs=c("Ri10NP","Ri10P","Ri2NP","Ri2P","RiAr10NP","RiAr10P","RiAr2NP","RiAr2P"))+
+labs(title="Supervivencia Moricandia rytidocarpoides",y="Probabilidad de Supervivencia", x="Semanas")
+  
 
-#Simulacion 1
 
-Datsu <-read.table("Simulacion_liquenes.txt",header=TRUE, sep="\t", na.strings="NA", dec=",", strip.white=TRUE)
-Datsu$TRAT<-reorder(Datsu$TRAT,Datsu$SIMUL_1,mean)
-library(sciplot)
-bargraph.CI(TRAT,SIMUL_1, group = NULL, data = Datsu, main="Movimiento simulacion 1",font.main=4,xlab = "Tratamientos", ylab = "Movimiento",cex.names = 1.25,err.width=0.05,legend=T)
 
-#GLM  
-glm<-glm(SIMUL_1~TRAT,data=Datsu,family=binomial)
-summary (glm)
-glht.glm <- glht(glm, mcp(TRAT = "Tukey"))
-summary(glht.glm)
-cld(glht.glm,level=0.05,decreasing=F)
+```
 
-#Los resultados son iguales ya que no hubo movimiento en la simulacion 2 respecto a la 1
-identical(Datsu$SIMUL_1,Datsu$SIMUL_2)
-Datsu$SIMUL_1==Datsu$SIMUL_2
+```{r}
+glm1<-glm(sup_q_ry$S9~sup_q_ry$Tratamiento,family=binomial,data=sup_q_ry)
+summary(glm1)
+```
 
-#Medias error st
-library(plyr)
-ddply(Datsu, .(TRAT), summarise,N=length( SIMUL_1[!is.na( SIMUL_1)]),mean=mean( SIMUL_1[!is.na( SIMUL_1)]),sd=sd( SIMUL_1[!is.na( SIMUL_1)]),se=sd( SIMUL_1[!is.na( SIMUL_1)])/sqrt(length( SIMUL_1[!is.na( SIMUL_1)])))
+```{r}
+mod3<- aovp(sup_q_ry$S9~Tratamiento,data=sup_q_ry)
+summary(mod3)
+
+library(multcomp)
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+```
+
+
+#Análisis supervivencia Moricandia arvensis Baza
+ 
+
+```{r}
+status_h<-1*sup_b_mo$S9
+kmfit_h<-survfit(Surv(sup_b_mo$tiempo,status_h)~sup_b_mo$Tratamiento,type="kaplan-meier")
+summary(kmfit_h)
+kmfit_h
+```
+
+
+```{r paged.print=TRUE}
+ggsurvplot (kmfit_h,sup_b_mo, size = 1,
+palette = c("black"  , "red", "green3",  "blue" ,   "cyan"  ,  "magenta" ,"yellow" , "gray" ),
+ylim=c(0.35,1),xlim=c(0,9),
+legend="top",
+legend.labs=c("Mo10NP","Mo10P","Mo2NP","Mo2P","MoAr10NP","MoAr10P","MoAr2NP","MoAr2P"))+
+labs(title="Supervivencia Moricandia moricandioides",y="Probabilidad de Supervivencia", x="Semanas")
+  
+
+
+
+```
+
+```{r}
+glm1<-glm(sup_b_mo$S9~sup_b_mo$Tratamiento,family=binomial,data=sup_b_mo)
+summary(glm1)
+```
+
+```{r}
+mod3<- aovp(sup_b_mo$S9~Tratamiento,data=sup_b_mo)
+summary(mod3)
+
+library(multcomp)
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+```
+
+```{r}
+
+
+mod3<-aovp(sup_b_mo$S9~sup_b_mo$Competencia)
+summary(mod3)
+
+summary(lmp(sup_b_mo$S9~sup_b_mo$Suelo*sup_b_mo$Densidad*sup_b_mo$Competencia, perm="Exact"))
+```
+
+#Análisis de competencia
+
+```{r}
+compet<- read_excel("Analisis_comp.xlsx")
+str(compet)
+
+compet$...14<- NULL
+compet$...15<- NULL
+compet$...16<- NULL
+compet$...17<- NULL
+
+compet$Comp<-as.numeric(compet$Comp)
+compet$Tratamiento<-as.factor(compet$Tratamiento)
+
+compet<-na.omit(compet)
+```
+#Subset datos
+
+```{r}
+comp_q<- subset(compet, compet$Localidad=="Quesada")
+
+comp_q_arv<- subset(comp_q,comp_q$Especie=="M.arvensis")
+comp_q_ry<-subset(comp_q,comp_q$Especie=="M.rytidocarpoides")
+
+comp_b<-subset(compet,compet$Localidad=="Baza")
+comp_b_arv<-subset(comp_b,comp_b$Especie=="M.arvensis")
+comp_b_mo<-subset(comp_b,comp_b$Especie=="M.moricandioides")
+
+```
+
+#M.arvensis (Q)
+```{r}
+mod3<-aovp(Comp~Tratamiento,data=comp_q_arv)
+summary(mod3)
+
+summary(lmp(Comp~Suelo*Densidad*Competencia,data=comp_q_arv))
+View(mod3)
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+
+```
+
+```{r}
+ggplot(data=comp_q_arv,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Competencia Moricandia arvensis(Q)")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(Q)"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Comp"))+
+  ylim(-1,0.6)+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.42,0.19), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+#M.arvensis(B)
+```{r}
+mod3<-aovp(Comp~Tratamiento,data=comp_b_arv)
+summary(mod3)
+
+
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+
+```
+
+```{r}
+ggplot(data=comp_b_arv,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Competencia Moricandia arvensis(Q)")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(Q)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Comp"))+
+  ylim(-0.7,0.6)+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.42,0.14), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+#M.rytidocarpoides
+```{r}
+mod3<-aovp(Comp~Tratamiento,data=comp_q_ry)
+summary(mod3)
+
+
+
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+
+```
+
+```{r}
+ggplot(data=comp_q_ry,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Competencia Moricandia arvensis(Q)")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(Q)"),labels = c("M.rytidocarpoides"="M.rytidocarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Comp"))+
+  ylim(-1,0.6)+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","RiAr2NP"="RiAr2NP","Ar10NP"="Ar10NP","RiAr10NP"="RiAr10NP","Ar2P"="Ar2P","RiAr2P"="RiAr2P","Ar10P"="Ar10P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.42,0.19), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+#M.moricandioides
+
+```{r}
+mod3<-aovp(Comp~Tratamiento,data=comp_b_mo)
+summary(mod3)
+
+
+Tukey.mod3<-glht(mod3, mcp(Tratamiento = "Tukey"))
+summary(Tukey.mod3)
+cld(Tukey.mod3,level=0.05,decreasing=F)
+
+
+```
+
+```{r}
+ggplot(data=comp_b_mo,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Competencia Moricandia moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(Q)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Comp"))+
+  ylim(-1,0.67)+
+  scale_x_discrete(labels=c("Ar2NP"="Ar2NP","MoAr2NP"="MoAr2NP","Ar10NP"="Ar10NP","MoAr10NP"="MoAr10NP","Ar2P"="Ar2P","MoAr2P"="MoAr2P","Ar10P"="Ar10P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.42,0.19), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+```
+
+```{r}
+ggplot(data=comp_q,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa M.arvensis y M.rytidocarpoides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.rytidocarpoides"="M.rytodcarpoides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Competencia"))+
+  ylim(-1,0.6)+
+  scale_x_discrete(limits=c("RiAr2NP"="RiAr2NP","RiAr10NP"="RiAr10NP","RiAr2P"="RiAr2P","RiAr10P"="RiAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.85), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
+
+```{r}
+ggplot(data=comp_b,aes(x=Tratamiento,y=Comp))+
+  geom_boxplot(aes(fill=Especie))+
+  ggtitle(" Biomasa M.arvensis y M.moricandioides")+
+  scale_color_manual(values=c("red3","royalblue1"),name=c("M.arvensis(B)"),labels = c("M.moricandioides"="M.moricandioides", "M.arvensis"="M.arvensis"))+
+  labs(x=c("Tratamiento"),y=c("Competencia"))+
+  ylim(-1,0.6)+
+  scale_x_discrete(limits=c("MoAr2NP"="MoAr2NP","MoAr10NP"="MoAr10NP","MoAr2P"="MoAr2P","MoAr10P"="MoAr10P"))+
+  theme(axis.title = element_text(size = rel(1.5)))+
+  theme(axis.text  = element_text(size = rel(0.8)))+
+  theme(legend.title = element_text(size = rel(1)))+
+  theme(legend.text  = element_text(size = rel(1)))+
+  theme(axis.line = element_line(color = 'black'))+
+  theme(legend.position=c(0.80,0.25), legend.background = element_blank())+
+  theme( panel.grid.minor = element_blank()
+         ,panel.background = element_rect(fill="white")
+         ,panel.border = element_rect(fill=NA, color = "black"))
+
+```
 
